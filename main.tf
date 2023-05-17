@@ -1,5 +1,5 @@
 module "vpc" {
-  source            = "github.com//tf-module-vpc"
+  source            = "github.com/kiran6055/tf-module-vpc"
   env               = var.env
   default_vpc_id    = var.default_vpc_id
 
@@ -11,7 +11,7 @@ module "vpc" {
 }
 
 module "docdb" {
-  source = "github.com//tf-module-docdb"
+  source = "github.com/kiran6055/tf-module-docdb"
   env    = var.env
 
   for_each   = var.docdb
@@ -24,7 +24,7 @@ module "docdb" {
 }
 
 module "RDS" {
-  source = "github.com//tf-module-RDS"
+  source = "github.com/kiran6055/tf-module-RDS"
   env    = var.env
 
   for_each             = var.rds
@@ -38,7 +38,7 @@ module "RDS" {
 }
 
 module "elasticache" {
-  source = "github.com//tf-module-elasticache"
+  source = "github.com/kiran6055/tf-module-elasticache"
   env    = var.env
 
   for_each        = var.elasticache
@@ -51,7 +51,7 @@ module "elasticache" {
 }
 
 module "rabbitmq" {
-  source              = "github.com//tf-module-rabbitmq"
+  source              = "github.com/kiran6055/tf-module-rabbitmq"
   env                 = var.env
   bastion_cidr        = var.bastion_cidr
 
@@ -69,7 +69,7 @@ module "rabbitmq" {
 # concat function is used for app and web subntes for available if there are any two subnets required we need to use concat function each.value.internal ? is a condition used to get values for internet and to change subntes
 
 module "alb" {
-  source = "github.com//tf-module-alb"
+  source = "github.com/kiran6055/tf-module-alb"
   env    = var.env
 
   for_each             = var.alb
@@ -84,7 +84,7 @@ module "alb" {
 
 
 module "apps" {
-  source = "github.com//tf-module-app"
+  source = "github.com/kiran6055/tf-module-app"
   env    = var.env
 
   depends_on        = [module.docdb, module.RDS, module.elasticache, module.rabbitmq, module.alb]
