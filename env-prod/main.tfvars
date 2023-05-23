@@ -166,7 +166,7 @@ apps = {
     app_port                = 8080
     allow_cidr_subnets_type = "private_subnets"
     allow_cidr_subnets_name = "app"
-    max_size                = 3
+    max_size                = 5
     min_size                = 2
     desired_capacity        = 2
     instance_type           = "t2.medium"
@@ -184,7 +184,7 @@ apps = {
     max_size                = 3
     min_size                = 2
     desired_capacity        = 2
-    instance_type           = "t3.micro"
+    instance_type           = "t3.small"
     alb                     = "private"
     listener_priority       = 104
   }
