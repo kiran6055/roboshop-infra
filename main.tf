@@ -70,8 +70,9 @@ module "rabbitmq" {
 # concat function is used for app and web subntes for available if there are any two subnets required we need to use concat function each.value.internal ? is a condition used to get values for internet and to change subntes
 
 module "alb" {
-  source = "github.com/kiran6055/tf-module-alb"
-  env    = var.env
+  source            = "github.com/kiran6055/tf-module-alb"
+  env               = var.env
+  dns_domain        = var.dns_domain
 
   for_each             = var.alb
   subnet_ids           = lookup(lookup(lookup(lookup(module.vpc, each.value.vpc_name, null), each.value.subnets_type, null), each.value.subnets_name, null), "subnet_ids", null)

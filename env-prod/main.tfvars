@@ -86,6 +86,7 @@ alb = {
     subnets_type        = "public_subnets_ids"
     subnets_name        = "public"
     internal            = false
+    dns_domain          = "www.awsctr.online"
 
   }
   private = {
@@ -93,6 +94,7 @@ alb = {
     subnets_type        = "private_subnets_ids"
     subnets_name        = "app"
     internal            = true
+    dns_domain          = ""
 
   }
 }
