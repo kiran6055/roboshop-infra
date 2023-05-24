@@ -72,7 +72,7 @@ module "rabbitmq" {
 module "alb" {
   source            = "github.com/kiran6055/tf-module-alb"
   env               = var.env
-  dns_domain        = var.dns_domain
+
 
   for_each             = var.alb
   subnet_ids           = lookup(lookup(lookup(lookup(module.vpc, each.value.vpc_name, null), each.value.subnets_type, null), each.value.subnets_name, null), "subnet_ids", null)
