@@ -117,6 +117,9 @@ module "alb" {
 
 
 #creating a minikube using terraform
+# element in aws_subnet_id is used for to pick the first number where we gave 0 also in the end
+
+
 module "minikube" {
   source = "github.com/scholzj/terraform-aws-minikube"
 
@@ -125,8 +128,9 @@ module "minikube" {
   aws_instance_type = "t3.medium"
   ssh_public_key    = "~/.ssh/id_rsa.pub"
   aws_subnet_id     = element(lookup(lookup(lookup(lookup(module.vpc,main, null), public_subnets, null), public, null), "subnet_ids", null), 0)
+
   //ami_image_id        = data.aws_ami.ami.id
-  hosted_zone         = var.hosted_zone
+  hosted_zone         = var.HOSTED_ZONE
   hosted_zone_private = false
 
   tags = {
@@ -140,3 +144,15 @@ module "minikube" {
     "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/external-dns.yaml"
   ]
 }
+
+
+
+output "MINIKUBE_SERVER" {
+  value = "ssh centos@${module.minikube.public_ip}"
+}
+
+output "KUBE_CONFIG" {
+  value = "scp centos@${module.minikube.public_ip}:/home/centos/kubeconfig ~/.kube/config"
+}
+
+element(lookup(lookup(lookup(lookup(module.vpc,main, null), public_subnets, null), public, null), "subnet_ids", null), 0)
