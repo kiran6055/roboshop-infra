@@ -155,4 +155,3 @@ output "KUBE_CONFIG" {
   value = "scp centos@${module.minikube.public_ip}:/home/centos/kubeconfig ~/.kube/config"
 }
 
-element(lookup(lookup(lookup(lookup(module.vpc,main, null), public_subnets, null), public, null), "subnet_ids", null), 0)
