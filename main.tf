@@ -121,7 +121,7 @@ module "alb" {
 
 
 module "minikube" {
-  source = "github.com/kirandevopskumar/terraform-aws-minikube"
+  source = "github.com/scholzj/terraform-aws-minikube"
 
   aws_region        = "us-east-1"
   cluster_name      = "minikube"
