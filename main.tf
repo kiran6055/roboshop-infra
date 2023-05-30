@@ -130,7 +130,7 @@ module "minikube" {
   aws_subnet_id     = element(lookup(lookup(lookup(lookup(module.vpc,main, null), public_subnets, null), public, null), "subnet_ids", null), 0)
 
   //ami_image_id        = data.aws_ami.ami.id
-  hosted_zone         = var.HOSTED_ZONE
+  hosted_zone         = var.hosted_zone
   hosted_zone_private = false
 
   tags = {
