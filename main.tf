@@ -69,21 +69,21 @@ module "rabbitmq" {
 
 # concat function is used for app and web subntes for available if there are any two subnets required we need to use concat function each.value.internal ? is a condition used to get values for internet and to change subntes
 
-module "alb" {
-  source            = "github.com/kiran6055/tf-module-alb"
-  env               = var.env
+#module "alb" {
+#  source            = "github.com/kiran6055/tf-module-alb"
+#  env               = var.env
 
 
-  for_each             = var.alb
-  subnet_ids           = lookup(lookup(lookup(lookup(module.vpc, each.value.vpc_name, null), each.value.subnets_type, null), each.value.subnets_name, null), "subnet_ids", null)
-  vpc_id               = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
-  allow_cidr           = each.value.internal ? concat(lookup(lookup(lookup(lookup(var.vpc, each.value.vpc_name, null), "private_subnets", null), "web", null), "cidr_block", null), lookup(lookup(lookup(lookup(var.vpc, each.value.vpc_name, null), "private_subnets", null), "app", null), "cidr_block", null)): ["0.0.0.0/0"]
-  subnets_name         = each.value.subnets_name
-  internal             = each.value.internal
-  dns_domain           = each.value.dns_domain
+#  for_each             = var.alb
+#  subnet_ids           = lookup(lookup(lookup(lookup(module.vpc, each.value.vpc_name, null), each.value.subnets_type, null), each.value.subnets_name, null), "subnet_ids", null)
+#  vpc_id               = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
+#  allow_cidr           = each.value.internal ? concat(lookup(lookup(lookup(lookup(var.vpc, each.value.vpc_name, null), "private_subnets", null), "web", null), "cidr_block", null), lookup(lookup(lookup(lookup(var.vpc, each.value.vpc_name, null), "private_subnets", null), "app", null), "cidr_block", null)): ["0.0.0.0/0"]
+#  subnets_name         = each.value.subnets_name
+#  internal             = each.value.internal
+#  dns_domain           = each.value.dns_domain
 
 
-}
+#}
 
 # we are using this for muttable and immutable approach onl
 #module "apps" {
@@ -120,34 +120,46 @@ output "vpc" {
 # element in aws_subnet_id is used for to pick the first number where we gave 0 also in the end
 
 
-module "minikube" {
-  source = "github.com/scholzj/terraform-aws-minikube"
+#module "minikube" {
+#  source = "github.com/scholzj/terraform-aws-minikube"
 
-  aws_region        = "us-east-1"
-  cluster_name      = "minikube"
-  aws_instance_type = "t3.medium"
-  ssh_public_key    = "~/.ssh/id_rsa.pub"
-  aws_subnet_id     = element(lookup(lookup(lookup(lookup(module.vpc, "main", null), "public_subnets_ids", null), "public", null), "subnet_ids", null), 0)
-  //ami_image_id        = data.aws_ami.ami.id
-  hosted_zone         = var.hosted_zone
-  hosted_zone_private = false
+#  aws_region        = "us-east-1"
+#  cluster_name      = "minikube"
+#  aws_instance_type = "t3.medium"
+#  ssh_public_key    = "~/.ssh/id_rsa.pub"
+#  aws_subnet_id     = element(lookup(lookup(lookup(lookup(module.vpc, "main", null), "public_subnets_ids", null), "public", null), "subnet_ids", null), 0)
+#  //ami_image_id        = data.aws_ami.ami.id
+#  hosted_zone         = var.hosted_zone
+#  hosted_zone_private = false
 
-  tags = {
-    Application = "Minikube"
-  }
+#  tags = {
+#    Application = "Minikube"
+#  }
 
-  addons = [
-    "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/storage-class.yaml",
-    "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/heapster.yaml",
-    "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/dashboard.yaml",
-    "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/external-dns.yaml"
-  ]
-}
+#  addons = [
+#    "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/storage-class.yaml",
+#    "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/heapster.yaml",
+#    "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/dashboard.yaml",
+#    "https://raw.githubusercontent.com/scholzj/terraform-aws-minikube/master/addons/external-dns.yaml"
+#  ]
+#}
 
-output "MINIKUBE_SERVER" {
-  value = "ssh centos@${module.minikube.public_ip}"
-}
+#output "MINIKUBE_SERVER" {
+#  value = "ssh centos@${module.minikube.public_ip}"
+#}
 
-output "KUBE_CONFIG" {
-  value = "scp centos@${module.minikube.public_ip}:/home/centos/kubeconfig ~/.kube/config"
+#output "KUBE_CONFIG" {
+#  value = "scp centos@${module.minikube.public_ip}:/home/centos/kubeconfig ~/.kube/config"
+#}
+
+
+# creating EKS
+module EKS {
+  source      = "github.com/r-devops/tf-module-eks"
+  ENV         = var.env
+  PRIVATE_SUBNET_IDS  = lookup(lookup(lookup(lookup(module.vpc, "main", null), "private_subnet_ids", null), "app", null), "subnet_ids", null)
+  PUBLIC_SUBNET_IDS   = lookup(lookup(lookup(lookup(module.vpc, "main", null), "public_subnet_ids", null), "app", null), "subnet_ids", null)
+  DESIRED_SIZE        = 2
+  MAX_SIZE            = 2
+  MIN_SIZE            = 2
 }
