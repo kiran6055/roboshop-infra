@@ -162,4 +162,5 @@ module "eks" {
   DESIRED_SIZE        = 2
   MAX_SIZE            = 2
   MIN_SIZE            = 2
+  PARAMETER_STORE_ROBOSHOP_PROJECT = true
 }
