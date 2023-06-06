@@ -157,8 +157,8 @@ output "vpc" {
 module "eks" {
   source      = "github.com/r-devops/tf-module-eks"
   ENV         = var.env
-  private_subnets_ids  = lookup(lookup(lookup(lookup(module.vpc, "main", null), "private_subnets_ids", null), "app", null), "subnet_ids", null)
-  public_subnets_ids   = lookup(lookup(lookup(lookup(module.vpc, "main", null), "public_subnets_ids", null), "app", null), "subnet_ids", null)
+  PRIVATE_SUBNETS_IDS  = lookup(lookup(lookup(lookup(module.vpc, "main", null), "private_subnets_ids", null), "app", null), "subnet_ids", null)
+  PUBLIC_SUBNETS_IDS   = lookup(lookup(lookup(lookup(module.vpc, "main", null), "public_subnets_ids", null), "app", null), "subnet_ids", null)
   DESIRED_SIZE        = 2
   MAX_SIZE            = 2
   MIN_SIZE            = 2
