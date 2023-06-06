@@ -162,5 +162,5 @@ module "eks" {
   DESIRED_SIZE        = 2
   MAX_SIZE            = 2
   MIN_SIZE            = 2
-  PCREATE_PARAMETER_STORE = true
+  CREATE_PARAMETER_STORE = true
 }
