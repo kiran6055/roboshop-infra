@@ -54,7 +54,7 @@ module "rabbitmq" {
   source              = "github.com/kiran6055/tf-module-rabbitmq"
   env                 = var.env
   bastion_cidr        = var.bastion_cidr
-#  monitor_cidr        = var.monitor_cidr
+  monitor_cidr        = var.monitor_cidr
 
   for_each             = var.rabbitmq
   subnet_ids           = lookup(lookup(lookup(lookup(module.vpc, each.value.vpc_name, null), "private_subnets_ids", null), each.value.subnets_name, null), "subnet_ids", null)
@@ -106,7 +106,7 @@ module "apps" {
   instance_type     = each.value.instance_type
   listener_priority = each.value.listener_priority
   bastion_cidr      = var.bastion_cidr
-#  monitor_cidr      = var.monitor_cidr
+  monitor_cidr      = var.monitor_cidr
 
 
 }

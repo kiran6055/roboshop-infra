@@ -1,7 +1,7 @@
 env = "prod"
 default_vpc_id = "vpc-03025dffe48dc1daf"
 bastion_cidr = ["172.31.0.108/32"]
-#monitor_cidr = ["172.31.0.96/32"]
+monitor_cidr = ["172.31.0.96/32"]
 hosted_zone = "awsctr.online"
 
 vpc ={
