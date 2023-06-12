@@ -109,7 +109,7 @@ module "apps" {
 #  monitor_cidr      = var.monitor_cidr
 
 
-#}
+}
 
 output "vpc" {
   value = module.vpc
